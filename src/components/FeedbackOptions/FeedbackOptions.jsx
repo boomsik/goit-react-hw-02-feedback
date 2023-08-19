@@ -5,11 +5,11 @@ import { OptionsWrapper } from './FeedbackOptions.styled';
 const FeedbackOptions = ({ onClick, feedbackOptions }) => {
   return (
     <OptionsWrapper>
-      {Object.keys(feedbackOptions).map((key, ind) => {
+      {Object.keys(feedbackOptions).map(key => {
         return (
           <button
             className="optionButton"
-            key={ind}
+            key={key}
             onClick={() => onClick(key)}
             color={key}
             size="large"
