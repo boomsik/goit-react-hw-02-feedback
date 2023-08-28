@@ -2,15 +2,16 @@ import PropTypes from 'prop-types';
 
 import { OptionsWrapper } from './FeedbackOptions.styled';
 
-const FeedbackOptions = ({ onClick, feedbackOptions }) => {
+const FeedbackOptions = ({ options }) => {
   return (
     <OptionsWrapper>
-      {Object.keys(feedbackOptions).map(key => {
+      {Object.keys(options).map(key => {
+        const option = options[key];
         return (
           <button
             className="optionButton"
             key={key}
-            onClick={() => onClick(key)}
+            onClick={() => option.setCount(option.count + 1)}
             color={key}
             size="large"
             variant="contained"

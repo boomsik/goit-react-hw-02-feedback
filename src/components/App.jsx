@@ -1,28 +1,47 @@
-import React, { Component } from 'react';
+import React, { useState } from 'react';
 
 import Section from './Section';
 import FeedbackOptions from './FeedbackOptions';
 import Statistics from './Statistics';
+import StatisticsLayout from './StatisticsLayout/StatisticsLayout';
+import Notification from './Notification/Notification';
 
-export class App extends Component {
-  state = {
-    good: 0,
-    neutral: 0,
-    bad: 0,
+export const App = () => {
+  const [good, setGood] = useState(0);
+  const [neutral, setNeutral] = useState(0);
+  const [bad, setBad] = useState(0);
+
+  const options = {
+    good: {
+      count: good,
+      setCount: setGood,
+    },
+    neutral: {
+      count: neutral,
+      setCount: setNeutral,
+    },
+    bad: {
+      count: bad,
+      setCount: setBad,
+    },
   };
+  const totalCount = good + neutral + bad;
+  const positiveReviews =
+    totalCount === 0 ? 0 : Math.round((good / totalCount) * 100);
 
-  onClick = option => {
-    this.setState(prevState => ({
-      [option]: prevState[option] + 1,
-    }));
-  };
-
-  render() {
-    return (
-      <Section title="Please leave feedback">
-        <FeedbackOptions onClick={this.onClick} feedbackOptions={this.state} />
-        <Statistics feedbackOptions={this.state} />
-      </Section>
-    );
-  }
-}
+  return (
+    <Section title="Please leave feedback">
+      <FeedbackOptions options={options} />
+      <StatisticsLayout title="Statistics">
+        {totalCount !== 0 && (
+          <Statistics
+            options={options}
+            totalCount={totalCount}
+            positiveReviews={positiveReviews}
+          />
+        )}
+        {totalCount === 0 && <Notification message="No feedback given" />}
+      </StatisticsLayout>
+    </Section>
+  );
+};
