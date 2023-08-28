@@ -25,6 +25,7 @@ export const App = () => {
       setCount: setBad,
     },
   };
+
   const totalCount = good + neutral + bad;
   const positiveReviews =
     totalCount === 0 ? 0 : Math.round((good / totalCount) * 100);
