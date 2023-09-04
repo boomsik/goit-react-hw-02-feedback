@@ -1,48 +1,48 @@
-import React, { useState } from 'react';
-
+import { Component } from 'react';
 import Section from './Section';
 import FeedbackOptions from './FeedbackOptions';
 import Statistics from './Statistics';
-import StatisticsLayout from './StatisticsLayout/StatisticsLayout';
-import Notification from './Notification/Notification';
+import StatisticsLayout from './StatisticsLayout';
+import Notification from './Notification';
 
-export const App = () => {
-  const [good, setGood] = useState(0);
-  const [neutral, setNeutral] = useState(0);
-  const [bad, setBad] = useState(0);
+export class App extends Component {
+  state = {
+    good: 0,
+    neutral: 0,
+    bad: 0,
+  };
+  onClick = option =>
+    this.setState(prevState => ({ [option]: prevState[option] + 1 }));
 
-  const options = {
-    good: {
-      count: good,
-      setCount: setGood,
-    },
-    neutral: {
-      count: neutral,
-      setCount: setNeutral,
-    },
-    bad: {
-      count: bad,
-      setCount: setBad,
-    },
+  totalFeedback = () => {
+    const { good, neutral, bad } = this.state;
+    const total = good + neutral + bad;
+    return total;
   };
 
-  const totalCount = good + neutral + bad;
-  const positiveReviews =
-    totalCount === 0 ? 0 : Math.round((good / totalCount) * 100);
+  positiveReviews = () => {
+    const { good, neutral, bad } = this.state;
+    const total = good + neutral + bad;
+    const percentage = total === 0 ? 0 : Math.round((good / total) * 100);
+    return percentage;
+  };
 
-  return (
-    <Section title="Please leave feedback">
-      <FeedbackOptions options={options} />
-      <StatisticsLayout title="Statistics">
-        {totalCount !== 0 && (
-          <Statistics
-            options={options}
-            totalCount={totalCount}
-            positiveReviews={positiveReviews}
-          />
-        )}
-        {totalCount === 0 && <Notification message="No feedback given" />}
-      </StatisticsLayout>
-    </Section>
-  );
-};
+  render() {
+    return (
+      <Section title="Please leave feedback">
+        <FeedbackOptions feedback={this.state} onClick={this.onClick} />
+        <StatisticsLayout title="Statistics">
+          {this.totalFeedback() === 0 ? (
+            <Notification message="There is no feedback" />
+          ) : (
+            <Statistics
+              options={this.state}
+              totalCount={this.totalFeedback()}
+              positiveReviews={this.positiveReviews()}
+            />
+          )}
+        </StatisticsLayout>
+      </Section>
+    );
+  }
+}

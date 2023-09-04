@@ -3,18 +3,15 @@ import PropTypes from 'prop-types';
 import { Box, Grid, ResultWrapper } from './Statistics.styled';
 
 const Statistics = ({ options, totalCount, positiveReviews }) => {
+  const { good, neutral, bad } = options;
   return (
     <Box>
       <Grid>
-        {Object.keys(options).map(key => {
-          const option = options[key];
-          return (
-            <div className="option-wrapper" key={key}>
-              <p className="option-name">{key}</p>
-              <p className="option-count">{option.count}</p>
-            </div>
-          );
-        })}
+        <div className="option-wrapper">
+          <span>Good:{good}</span>
+          <span>Neutral:{neutral}</span>
+          <span>Bad:{bad}</span>
+        </div>
       </Grid>
       <ResultWrapper>
         <p>Total: {totalCount}</p>
@@ -26,12 +23,14 @@ const Statistics = ({ options, totalCount, positiveReviews }) => {
   );
 };
 
-export default Statistics;
-
 Statistics.propTypes = {
-  feedbackOptions: PropTypes.shape({
+  totalCount: PropTypes.number.isRequired,
+  positiveReviews: PropTypes.number.isRequired,
+  options: PropTypes.shape({
     good: PropTypes.number.isRequired,
     neutral: PropTypes.number.isRequired,
     bad: PropTypes.number.isRequired,
   }),
 };
+
+export default Statistics;

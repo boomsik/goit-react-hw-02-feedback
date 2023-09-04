@@ -1,1 +1,1 @@
-export { default } from './StatisticsLayout';
+export { default } from './StatisticsLayout.jsx';
